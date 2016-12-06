@@ -13,6 +13,7 @@ public class RootCompleteService extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
+        System.out.println("开机了");
         TelephonyManager tm = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
         //获取sim卡序列号
         String simSerialNumber = tm.getSimSerialNumber();

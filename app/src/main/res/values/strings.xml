@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">安全卫士</string>
+    <string name="sample_device_admin" >超级管理员</string>
+    <string name="sample_device_admin_description">远程删除数据或锁屏</string>
 </resources>

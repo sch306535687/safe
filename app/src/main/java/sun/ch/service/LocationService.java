@@ -63,6 +63,7 @@ public class LocationService extends Service {
             double longitude = location.getLongitude();
             //保存经纬度
             sharedPreferences.edit().putString("location",latitude+":"+longitude).commit();
+            System.out.println(latitude+":"+longitude);
         }
 
         @Override
