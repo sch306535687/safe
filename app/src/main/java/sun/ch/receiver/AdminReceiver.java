@@ -3,7 +3,7 @@ package sun.ch.receiver;
 import android.app.admin.DeviceAdminReceiver;
 
 /**
- * Created by Administrator on 2016/12/6.
+ * 设备管理器
  */
 public class AdminReceiver extends DeviceAdminReceiver {
 }
