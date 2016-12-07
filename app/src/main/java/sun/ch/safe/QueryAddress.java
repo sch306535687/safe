@@ -2,9 +2,13 @@ package sun.ch.safe;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -44,6 +48,7 @@ public class QueryAddress extends Activity {
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
             }
+
             @Override
             public void afterTextChanged(Editable s) {
 
@@ -54,7 +59,17 @@ public class QueryAddress extends Activity {
     public void queryAddress(View view) {
         //查询归属地
         String number = tvNumber.getText().toString();//获取查询的号码
-        String address = AddressDao.getAddress(number);//获取归属地地址
-        tvAddress.setText(address);//设置归属地到控件显示
+        if (!TextUtils.isEmpty(number)) {
+            String address = AddressDao.getAddress(number);//获取归属地地址
+            tvAddress.setText(address);//设置归属地到控件显示
+        } else {
+            //如果没有输入值则让输入框出现抖动效果
+            Animation animation = AnimationUtils.loadAnimation(this, R.anim.shake);
+            tvNumber.startAnimation(animation);
+            //再加入手机震动
+            Vibrator vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
+            vibrator.vibrate(2000);
+        }
+
     }
 }
