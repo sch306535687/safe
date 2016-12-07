@@ -42,6 +42,8 @@
         <activity android:name=".Step3Activity" />
         <activity android:name=".Step4Activity" />
         <activity android:name=".ContactActivity" />
+        <activity android:name=".AdvanceToolsActivity" />
+        <activity android:name=".QueryAddress" />
         <!--配置开机启动广播-->
         <receiver android:name="sun.ch.receiver.RootCompleteService">
             <intent-filter>

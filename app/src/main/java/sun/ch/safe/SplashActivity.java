@@ -27,8 +27,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -85,6 +87,8 @@ public class SplashActivity extends Activity {
         TextView tvVersion = (TextView) findViewById(R.id.tv_version);
         tvProgress = (TextView) findViewById(R.id.tv_progress);
         tvVersion.setText("版本名:" + getVersionName());
+        //初始化时，把数据库拷贝到/data/data/sun.ch.safe/files目录下
+        copyDatabase("address.db");
         //判断是否需要提示更新版本信息
         SharedPreferences sharedPreferences = getSharedPreferences("config", MODE_PRIVATE);
         //获取SharedPreferences中信息
@@ -99,7 +103,7 @@ public class SplashActivity extends Activity {
         }
         //设置渐变动画效果
         RelativeLayout layout = (RelativeLayout) findViewById(R.id.splash);
-        AlphaAnimation anim = new AlphaAnimation(0.3f,1);
+        AlphaAnimation anim = new AlphaAnimation(0.3f, 1);
         anim.setDuration(2000);
         layout.startAnimation(anim);
 
@@ -309,6 +313,39 @@ public class SplashActivity extends Activity {
             }
         }.start();
 
+    }
 
+    /**
+     * 把assets目录中的数据库拷贝到/data/data/sun.ch.safe/files/下
+     *
+     * @param databaseName 数据库名称
+     */
+    private void copyDatabase(String databaseName) {
+        InputStream inputStream = null;
+        FileOutputStream os = null;
+        File file = new File(getFilesDir(),databaseName);//创建路径file对象
+        //判断目录下是否已经存在此数据库
+        if (file.exists()) {
+            return;//如果存在就不需要读取
+        }
+        try {
+            inputStream = getAssets().open(databaseName);//读取asset目录下下的数据库为输入流,注意，assets必须跟main目录同级
+            os = new FileOutputStream(file);//创建输出流
+            //开始拷贝
+            int len = 0;
+            byte[] buffer = new byte[1024];
+            while ((len = inputStream.read(buffer)) != -1) {
+                os.write(buffer, 0, len);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                inputStream.close();
+                os.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }
