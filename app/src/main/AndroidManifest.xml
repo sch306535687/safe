@@ -54,6 +54,12 @@
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
+        <!--配置外拨电话广播-->
+        <!--<receiver android:name="sun.ch.receiver.OutgoingReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.NEW_OUTGOING_CALL" />
+            </intent-filter>
+        </receiver>-->
         <!--配置短信广播-->
         <receiver android:name="sun.ch.receiver.SmsBroadcastReceiver">
             <intent-filter android:priority="10000">
