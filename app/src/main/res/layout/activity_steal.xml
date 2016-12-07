@@ -77,6 +77,7 @@
             android:textColor="@color/black"
             android:layout_centerVertical="true"
             android:background="@drawable/shapebtn"
+            android:clickable="true"
             android:onClick="next"
             android:text="重新进入向导页"/>
     </RelativeLayout>
