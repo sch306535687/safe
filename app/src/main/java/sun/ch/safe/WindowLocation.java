@@ -33,9 +33,7 @@ public class WindowLocation extends Activity {
         //获取屏幕宽高
         final int screenWidth = getWindowManager().getDefaultDisplay().getWidth();
         final int screenHeight = getWindowManager().getDefaultDisplay().getHeight();
-        //获取控件宽高
-        final int width = drag.getWidth();
-        final int height = drag.getHeight();
+
         //初始化位置
         int lastLeft = sharedPreferences.getInt("lastLeft", 0);
         int lastTop = sharedPreferences.getInt("lastTop", 0);
