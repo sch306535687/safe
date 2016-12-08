@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tool="http://schemas.android.com/ch.sun.activity"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -9,25 +8,35 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:gravity="center"
         android:background="@color/green"
+        android:gravity="center"
+        android:text="设置中心"
         android:textColor="@color/black"
-        android:textSize="22sp"
-        android:text="设置中心"/>
+        android:textSize="22sp" />
 
-   <sun.ch.view.Settings_item
-       android:id="@+id/setting"
-       android:layout_width="match_parent"
-       android:layout_height="wrap_content"
-       tool:settingTitle="自动更新设置"
-       tool:desc_on="自动更新已经开启"
-       tool:desc_off="自动更新已经关闭"/>
+    <sun.ch.view.Settings_item
+        android:id="@+id/setting"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tool:desc_off="自动更新已经关闭"
+        tool:desc_on="自动更新已经开启"
+        tool:settingTitle="自动更新设置" />
+
     <sun.ch.view.Settings_item
         android:id="@+id/phoneAddress"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        tool:settingTitle="电话归属地显示设置"
+        tool:desc_off="归属地显示已经关闭"
         tool:desc_on="归属地显示已经开启"
-        tool:desc_off="归属地显示已经关闭"/>
+        tool:settingTitle="电话归属地显示设置" />
+
+    <sun.ch.view.Settings_click
+        android:id="@+id/showWindowStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+    <sun.ch.view.Settings_click
+        android:id="@+id/showWindowlocation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
 
 </LinearLayout>

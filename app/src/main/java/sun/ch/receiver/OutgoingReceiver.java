@@ -15,7 +15,6 @@ public class OutgoingReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         String resultData = getResultData();//获取外拨电话
         String address = AddressDao.getAddress(resultData);//获取归属地
-        //Toast.makeText(context,address,Toast.LENGTH_LONG).show();
         //弹出浮窗
         ShowWindowManager.showWindow(context,address);
     }

@@ -44,7 +44,6 @@ public class PhoneAddressService extends Service {
             switch (state){
                 case TelephonyManager.CALL_STATE_RINGING://正在响铃
                     String address = AddressDao.getAddress(incomingNumber);//获取来电归属地
-                    //Toast.makeText(PhoneAddressService.this,address,Toast.LENGTH_LONG).show();
                     //弹出浮窗
                     ShowWindowManager.showWindow(PhoneAddressService.this,address);
                     break;

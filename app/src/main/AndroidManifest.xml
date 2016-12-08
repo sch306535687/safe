@@ -48,6 +48,8 @@
         <activity android:name=".ContactActivity" />
         <activity android:name=".AdvanceToolsActivity" />
         <activity android:name=".QueryAddress" />
+        <activity android:name=".WindowLocation"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
         <!--配置开机启动广播-->
         <receiver android:name="sun.ch.receiver.RootCompleteService">
             <intent-filter>

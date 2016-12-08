@@ -1,6 +1,8 @@
 package sun.ch.safe;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -9,6 +11,7 @@ import android.widget.Toast;
 
 import sun.ch.service.PhoneAddressService;
 import sun.ch.utils.ServiceRunning;
+import sun.ch.view.Settings_click;
 import sun.ch.view.Settings_item;
 
 /**
@@ -17,6 +20,7 @@ import sun.ch.view.Settings_item;
 public class SettingsActivity extends Activity {
 
     private SharedPreferences sharedPreferences;
+    private Settings_click selectSstyle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,6 +29,13 @@ public class SettingsActivity extends Activity {
         sharedPreferences = getSharedPreferences("config", MODE_PRIVATE);
         setUpdate();//更新设置
         setAddress();//电话归属地设置
+        setWindowStyle();//设置浮窗风格
+        setShowWindowlocation();//设置归属地浮窗位置
+        //初始化保存的颜色风格
+        int window_style = sharedPreferences.getInt("window_style", 0);
+        String[] styles = new String[]{"半透明","活力橙","卫士蓝","金属灰","苹果绿"};
+        selectSstyle.setDesc(styles[window_style]);
+
     }
 
     /**
@@ -88,6 +99,56 @@ public class SettingsActivity extends Activity {
                     //开启来电归属地服务
                     startService(new Intent(SettingsActivity.this, PhoneAddressService.class));
                 }
+            }
+        });
+    }
+
+    /**
+     * 设置浮窗风格
+     */
+    public void setWindowStyle(){
+        selectSstyle = (Settings_click) findViewById(R.id.showWindowStyle);
+        //点击弹出风格单选框
+        selectSstyle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showDialog();
+            }
+        });
+    }
+
+    public void showDialog(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);//注意this的值
+        builder.setIcon(R.mipmap.ic_launcher);
+        builder.setTitle("归属地提示框风格");
+        final String[] styles = new String[]{"半透明","活力橙","卫士蓝","金属灰","苹果绿"};
+        //初始化保存的颜色风格
+        int window_style = sharedPreferences.getInt("window_style", 0);
+        builder.setSingleChoiceItems(styles, window_style, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                //存储颜色索引值
+                sharedPreferences.edit().putInt("window_style",which).commit();
+                selectSstyle.setDesc(styles[which]);
+                dialog.dismiss();//点击后直接退出
+            }
+        });
+        builder.setNegativeButton("取消",null);//null表示点击取消退出单选弹窗
+        builder.show();
+    }
+
+    /**
+     * 设置归属地浮窗位置
+     */
+    public void setShowWindowlocation(){
+        final Settings_click windowLocation = (Settings_click) findViewById(R.id.showWindowlocation);
+        //初始化
+        windowLocation.setTitle("归属地提示框位置");
+        windowLocation.setDesc("设置归属地提示框的显示位置");
+        windowLocation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(SettingsActivity.this,WindowLocation.class));
             }
         });
     }
