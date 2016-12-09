@@ -51,6 +51,10 @@ public class MainActivity extends Activity {
                         //手机防盗弹窗
                         showAlertDialog();
                         break;
+                    case 1:
+                        //点击的是设置按钮
+                        startActivity(new Intent(getApplicationContext(), BlackNameActivity.class));
+                        break;
                     case 7:
                         //点击的是设置按钮
                         startActivity(new Intent(getApplicationContext(), AdvanceToolsActivity.class));

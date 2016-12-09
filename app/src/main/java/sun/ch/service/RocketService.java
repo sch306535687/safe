@@ -3,10 +3,8 @@ package sun.ch.service;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.PixelFormat;
 import android.graphics.drawable.AnimationDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
@@ -102,10 +100,10 @@ public class RocketService extends Service {
                     case MotionEvent.ACTION_UP://手指抬起触发
                         System.out.println("x:"+ params.x+";y:"+ params.y);
                         if(params.x>120&& params.x<240&& params.y>screenHeight-150){
-                            rocketShoot();
+                            rocketShoot();//发射火箭
                             Intent intent = new Intent(RocketService.this, RocketBackgroundActivity.class);
                             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                            startActivity(intent);
+                            startActivity(intent);//打开火箭背景
                         }
                         break;
                 }
