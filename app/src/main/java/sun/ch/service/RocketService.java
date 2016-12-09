@@ -1,63 +1,59 @@
-package sun.ch.utils;
+package sun.ch.service;
 
+import android.app.Service;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.PixelFormat;
+import android.graphics.drawable.AnimationDrawable;
+import android.graphics.drawable.Drawable;
+import android.os.Handler;
+import android.os.IBinder;
+import android.os.Message;
+import android.support.annotation.Nullable;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.TextView;
+import android.widget.ImageView;
 
 import sun.ch.safe.R;
+import sun.ch.safe.RocketBackgroundActivity;
 
 /**
- * 创建可以在第三方应用中的浮窗
+ * Created by Administrator on 2016/12/9.
  */
-public class ShowWindowManager {
-
+public class RocketService extends Service {
     private static WindowManager manager;
     private static View view;
-    private static SharedPreferences sharedPreferences;
+    private WindowManager.LayoutParams params;
 
-    /**
-     * 弹出浮窗
-     * @param context
-     * @param msg
-     */
-    public static void showWindow(Context context,String msg){
-
-        sharedPreferences = context.getSharedPreferences("config", Context.MODE_PRIVATE);
-        manager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+    @Nullable
+    @Override
+    public IBinder onBind(Intent intent) {
+        return null;
+    }
+    @Override
+    public void onCreate() {
+        manager = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
         //配置参数信息
-        final WindowManager.LayoutParams params = new WindowManager.LayoutParams();
+        params = new WindowManager.LayoutParams();
         params.height = WindowManager.LayoutParams.WRAP_CONTENT;
         params.width = WindowManager.LayoutParams.WRAP_CONTENT;
         params.format = PixelFormat.TRANSLUCENT;
         params.type = WindowManager.LayoutParams.TYPE_PHONE;
         params.flags = WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE | WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON;
-
         //设置重心为左上角,默认为中心
         params.gravity = Gravity.LEFT + Gravity.TOP;
-        //设置浮窗位置
-        int lastLeft = sharedPreferences.getInt("lastLeft", 0);
-        int lastTop = sharedPreferences.getInt("lastTop", 0);
-        params.x = lastLeft;
-        params.y = lastTop;
+        view = View.inflate(this, R.layout.rocket,null);
+        final ImageView rocket = (ImageView) view.findViewById(R.id.iv_rocket);
 
-        //引用view控件对象
-        view = View.inflate(context, R.layout.activity_showwindow,null);
-        TextView tvView = (TextView) view.findViewById(R.id.window_text);
-        tvView.setText(msg);
+        //添加帧动画
+        rocket.setBackgroundResource(R.drawable.rocket);
+        AnimationDrawable rocketAnimation = (AnimationDrawable) rocket.getBackground();
+        rocketAnimation.start();
 
-        //自定义背景风格
-        int[] styles = new int[]{R.mipmap.call_locate_white,R.mipmap.call_locate_orange,
-                R.mipmap.call_locate_blue,R.mipmap.call_locate_gray,R.mipmap.call_locate_green};
-        int window_style = sharedPreferences.getInt("window_style", 0);
-        view.setBackgroundResource(styles[window_style]);
-
-        //把view添加到window屏幕
-        manager.addView(view,params);
+        manager.addView(view, params);
         //获取屏幕宽高
         final int screenWidth = manager.getDefaultDisplay().getWidth();
         final int screenHeight = manager.getDefaultDisplay().getHeight();
@@ -98,26 +94,59 @@ public class ShowWindowManager {
                             params.y = screenHeight-view.getHeight();
                         }
                         //更新view
-                        manager.updateViewLayout(view,params);
+                        manager.updateViewLayout(view, params);
                         //重新获取初始坐标
                         startX = (int) event.getRawX();
                         startY = (int) event.getRawY();
                         break;
                     case MotionEvent.ACTION_UP://手指抬起触发
-                        //存储坐标位置
-                        sharedPreferences.edit().putInt("lastLeft", params.x).commit();
-                        sharedPreferences.edit().putInt("lastTop", params.y).commit();
-                        System.out.println("x:"+params.x+";y:"+params.y);
+                        System.out.println("x:"+ params.x+";y:"+ params.y);
+                        if(params.x>120&& params.x<240&& params.y>screenHeight-150){
+                            rocketShoot();
+                            Intent intent = new Intent(RocketService.this, RocketBackgroundActivity.class);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            startActivity(intent);
+                        }
                         break;
                 }
                 return true;
             }
         });
     }
-    public static void closeWindow(){
-        if(manager!=null&&view!=null){
-            manager.removeView(view);
-            view = null;
+
+    private Handler handler = new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            int y = (int) msg.obj;
+            params.y -= y;
+            //更新view
+            manager.updateViewLayout(view, params);
         }
+    };
+    /**
+     * 发射火箭
+     */
+    private void rocketShoot() {
+        new Thread(){
+            @Override
+            public void run() {
+                for(int i=0;i<=10;i++){
+                    try {
+                        Thread.sleep(50);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    int y = i*40 ;
+                    Message message = handler.obtainMessage(0, y);
+                    handler.sendMessage(message);
+                }
+            }
+        }.start();
+
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
     }
 }

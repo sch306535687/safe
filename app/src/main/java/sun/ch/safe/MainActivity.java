@@ -17,6 +17,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import sun.ch.service.RocketService;
 import sun.ch.utils.md5;
 
 /**
@@ -61,6 +62,8 @@ public class MainActivity extends Activity {
                 }
             }
         });
+        //开启小火箭
+        startService(new Intent(this, RocketService.class));
     }
 
     protected void showAlertDialog() {

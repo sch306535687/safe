@@ -24,7 +24,8 @@
     <uses-permission android:name="android.permission.VIBRATE"/>
     <!--监控电话权限-->
     <uses-permission android:name="android.permission.PROCESS_OUTGOING_CALLS"/>
-
+    <!--WindowManager.LayoutParams.TYPE_PHONE的权限-->
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <application
         tools:replace="icon,label,theme"
         android:allowBackup="true"
@@ -48,6 +49,8 @@
         <activity android:name=".ContactActivity" />
         <activity android:name=".AdvanceToolsActivity" />
         <activity android:name=".QueryAddress" />
+        <activity android:name=".RocketBackgroundActivity"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
         <activity android:name=".WindowLocation"
             android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
         <!--配置开机启动广播-->
@@ -68,8 +71,10 @@
                 <action android:name="android.provider.Telephony.SMS_RECEIVED" />
             </intent-filter>
         </receiver>
-        <!--配置服务-->
+        <!--配置地理位置服务-->
         <service android:name="sun.ch.service.LocationService" />
+        <!--小火箭服务-->
+        <service android:name="sun.ch.service.RocketService" />
         <!--配置电话服务-->
         <service android:name="sun.ch.service.PhoneAddressService">
             <intent-filter>

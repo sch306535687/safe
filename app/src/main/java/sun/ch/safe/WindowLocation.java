@@ -3,14 +3,12 @@ package sun.ch.safe;
 import android.app.Activity;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 /**
  * Created by Administrator on 2016/12/8.
@@ -26,13 +24,15 @@ public class WindowLocation extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.windowlocation);
+
+        //获取屏幕宽高
+        final int screenWidth = getWindowManager().getDefaultDisplay().getWidth();
+        final int screenHeight = getWindowManager().getDefaultDisplay().getHeight();
+
         sharedPreferences = getSharedPreferences("config", MODE_PRIVATE);
         drag = (ImageView) findViewById(R.id.drag);
         top = (TextView) findViewById(R.id.text_top);
         bottom = (TextView) findViewById(R.id.text_bottom);
-        //获取屏幕宽高
-        final int screenWidth = getWindowManager().getDefaultDisplay().getWidth();
-        final int screenHeight = getWindowManager().getDefaultDisplay().getHeight();
 
         //初始化位置
         int lastLeft = sharedPreferences.getInt("lastLeft", 0);
@@ -49,6 +49,25 @@ public class WindowLocation extends Activity {
         params.leftMargin = lastLeft;
         params.topMargin = lastTop;
         drag.setLayoutParams(params);
+
+        //双击居中事件
+        final long[] mHits = new long[2];
+        drag.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                System.arraycopy(mHits,1,mHits,0,mHits.length-1);
+                mHits[mHits.length-1] = SystemClock.uptimeMillis();//获取开机后经历的时间
+                if(mHits[0] >= (SystemClock.uptimeMillis()-500)){
+                    //控件居中
+                    drag.layout((screenWidth-drag.getWidth())/2,drag.getTop(),(screenWidth+drag.getWidth())/2,drag.getBottom());
+                    //存储坐标位置
+                    int lastLeft = drag.getLeft();
+                    int lastTop = drag.getTop();
+                    sharedPreferences.edit().putInt("lastLeft", lastLeft).commit();
+                    sharedPreferences.edit().putInt("lastTop", lastTop).commit();
+                }
+            }
+        });
 
         //监听拖拽事件
         drag.setOnTouchListener(new View.OnTouchListener() {
@@ -103,7 +122,7 @@ public class WindowLocation extends Activity {
                         sharedPreferences.edit().putInt("lastTop", lastTop).commit();
                         break;
                 }
-                return true;
+                return false;//事件要向下传递，让双击事件可以响应
             }
         });
 
