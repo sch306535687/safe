@@ -55,6 +55,10 @@ public class MainActivity extends Activity {
                         //点击的是设置按钮
                         startActivity(new Intent(getApplicationContext(), BlackNameActivity.class));
                         break;
+                    case 2:
+                        //点击的是设置按钮
+                        startActivity(new Intent(getApplicationContext(), SoftWareManagerActivity.class));
+                        break;
                     case 7:
                         //点击的是设置按钮
                         startActivity(new Intent(getApplicationContext(), AdvanceToolsActivity.class));

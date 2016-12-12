@@ -8,7 +8,9 @@ import java.util.List;
 import java.util.Random;
 
 import sun.ch.bean.BlackNumberInfo;
+import sun.ch.bean.Info;
 import sun.ch.dao.BlackNameDao;
+import sun.ch.utils.AppInfos;
 
 /**
  * <a href="http://d.android.com/tools/testing/testing_android.html">Testing Fundamentals</a>
@@ -31,8 +33,8 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
     public void testAdd(){
         BlackNameDao dao = new BlackNameDao(context);
         Random random = new Random();
-        for(int i=0;i<50;i++){
-            dao.add("15860061070"+i,(random.nextInt(3)+1)+"");
+        for(int i=0;i<200;i++){
+            dao.add("15860000000"+i,(random.nextInt(3)+1)+"");
         }
     }
 
@@ -48,5 +50,13 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
             System.out.println("number:"+number+";mode:"+mode);
         }
 
+    }
+
+    public void testAppInfos(){
+        AppInfos appInfos = new AppInfos();
+        List<Info> infos = appInfos.getAppInfos(context);
+        for(Info info:infos){
+            System.out.println(info);
+        }
     }
 }
