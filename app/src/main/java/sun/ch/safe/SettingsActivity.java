@@ -7,8 +7,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Toast;
 
+import sun.ch.service.BlackNameService;
 import sun.ch.service.PhoneAddressService;
 import sun.ch.utils.ServiceRunning;
 import sun.ch.view.Settings_click;
@@ -35,7 +35,7 @@ public class SettingsActivity extends Activity {
         int window_style = sharedPreferences.getInt("window_style", 0);
         String[] styles = new String[]{"半透明","活力橙","卫士蓝","金属灰","苹果绿"};
         selectSstyle.setDesc(styles[window_style]);
-
+        initBlackName();//拦截黑名单
     }
 
     /**
@@ -152,5 +152,34 @@ public class SettingsActivity extends Activity {
             }
         });
     }
-
+    /**
+     * 黑名单拦截
+     */
+    public void initBlackName() {
+        final Settings_item blackName = (Settings_item) findViewById(R.id.blackName);
+        //获取服务是否正在手机后台运行
+        boolean serviceRunning = ServiceRunning.getServiceRunning(this, "sun.ch.service.BlackNameService");
+        if (serviceRunning) {
+            blackName.setCheck(true);//服务正在运行
+        } else {
+            blackName.setCheck(false);//服务停止运行
+        }
+        //监听自动更新设置
+        blackName.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                boolean check = blackName.getCheck();
+                //判断checkBox是否点击
+                if (check) {
+                    blackName.setCheck(false);
+                    //关闭来电归属地服务
+                    stopService(new Intent(SettingsActivity.this, BlackNameService.class));
+                } else {
+                    blackName.setCheck(true);
+                    //开启来电归属地服务
+                    startService(new Intent(SettingsActivity.this, BlackNameService.class));
+                }
+            }
+        });
+    }
 }

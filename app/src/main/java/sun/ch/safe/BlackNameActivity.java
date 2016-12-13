@@ -44,7 +44,6 @@ public class BlackNameActivity extends Activity {
             }else{
                 adapt.notifyDataSetChanged();
             }
-
             listView.setAdapter(adapt);//初始化listview
             ll_progress.setVisibility(View.INVISIBLE);//隐藏正在加载
         }
@@ -136,12 +135,14 @@ public class BlackNameActivity extends Activity {
                     mode = "2";
                 }else if(mode_phoneChecked){
                     mode = "3";
+                }else {
+                    Toast.makeText(BlackNameActivity.this,"请选择模式",Toast.LENGTH_SHORT).show();
+                    return;
                 }
                 boolean add = dao.add(number, mode);//添加数据
                 if(add){
                     dialog.dismiss();
-                    //initData();
-                    adapt.notifyDataSetChanged();//重新更新数据
+                    initData();
                 }
             }
         });

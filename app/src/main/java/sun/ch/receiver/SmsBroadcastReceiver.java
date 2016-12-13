@@ -15,10 +15,8 @@ import android.telephony.SmsMessage;
 import android.text.TextUtils;
 import android.widget.Toast;
 
-import sun.ch.dao.BlackNameDao;
 import sun.ch.safe.R;
 import sun.ch.service.LocationService;
-import sun.ch.utils.AppInfos;
 
 
 /**
@@ -44,16 +42,6 @@ public class SmsBroadcastReceiver extends BroadcastReceiver {
             for (Object pu : pdus) {
                 byte[] pu1 = (byte[]) pu;
                 SmsMessage msg = SmsMessage.createFromPdu(pu1);
-                //获取号码
-                String incomingNumber = msg.getOriginatingAddress();
-                //黑名单判断
-                BlackNameDao dao = new BlackNameDao(context);
-                String mode = dao.select(incomingNumber);
-                if (!TextUtils.isEmpty(mode)) {
-                    if (mode.equals("1")||mode.equals("2")) {
-                        abortBroadcast();
-                    }
-                }
                 //获取短信内容
                 String content = msg.getMessageBody();
                 if (content.equals("#*alarm*#")) {

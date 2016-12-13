@@ -8,7 +8,7 @@ import sun.ch.dao.AddressDao;
 import sun.ch.utils.ShowWindowManager;
 
 /**
- * Created by asus on 2016/12/7.
+ * 接收打出去的电话
  */
 public class OutgoingReceiver extends BroadcastReceiver {
     @Override

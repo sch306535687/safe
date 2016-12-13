@@ -6,36 +6,39 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
-    <!--读取sim卡权限-->
+    <!-- 读取sim卡权限 -->
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
-    <!--读取通讯录权限-->
+    <!-- 读取通讯录权限 -->
     <uses-permission android:name="android.permission.READ_CONTACTS" />
-    <!--发送短信权限-->
+    <!-- 发送短信权限 -->
     <uses-permission android:name="android.permission.SEND_SMS" />
-    <!--读取短信权限-->
+    <!-- 读取短信权限 -->
     <uses-permission android:name="android.permission.READ_SMS" />
-    <uses-permission android:name="android.permission.RECEIVE_SMS"/>
-    <!--开机启动权限-->
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
-    <!--地理位置权限-->
+    <uses-permission android:name="android.permission.RECEIVE_SMS" />
+    <!-- 开机启动权限 -->
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <!-- 地理位置权限 -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-    <!--手机震动权限-->
-    <uses-permission android:name="android.permission.VIBRATE"/>
-    <!--监控电话权限-->
-    <uses-permission android:name="android.permission.PROCESS_OUTGOING_CALLS"/>
-    <!--WindowManager.LayoutParams.TYPE_PHONE的权限-->
+    <!-- 手机震动权限 -->
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <!-- 监控电话权限 -->
+    <uses-permission android:name="android.permission.PROCESS_OUTGOING_CALLS" />
+    <!-- WindowManager.LayoutParams.TYPE_PHONE的权限 -->
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    <!--拦截电话权限-->
+    <uses-permission android:name="android.permission.CALL_PHONE" />
     <application
-        tools:replace="icon,label,theme"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme"
+        tools:replace="icon,label,theme">
         <activity android:name=".SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -51,53 +54,58 @@
         <activity android:name=".QueryAddress" />
         <activity android:name=".BlackNameActivity" />
         <activity android:name=".SoftWareManagerActivity" />
-        <activity android:name=".RocketBackgroundActivity"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
-        <activity android:name=".WindowLocation"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
-        <!--配置开机启动广播-->
+        <activity
+            android:name=".RocketBackgroundActivity"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+        <activity
+            android:name=".WindowLocation"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+        <!-- 配置开机启动广播 -->
         <receiver android:name="sun.ch.receiver.RootCompleteService">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
-        <!--配置外拨电话广播-->
-        <!--<receiver android:name="sun.ch.receiver.OutgoingReceiver">
+        <!-- 配置外拨电话广播 -->
+        <!--
+        <receiver android:name="sun.ch.receiver.OutgoingReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.NEW_OUTGOING_CALL" />
             </intent-filter>
-        </receiver>-->
-        <!--配置短信广播-->
+        </receiver>
+        -->
+        <!-- 配置短信广播 -->
         <receiver android:name="sun.ch.receiver.SmsBroadcastReceiver">
             <intent-filter android:priority="10000">
                 <action android:name="android.provider.Telephony.SMS_RECEIVED" />
             </intent-filter>
         </receiver>
-        <!--配置地理位置服务-->
+        <!-- 配置地理位置服务 -->
         <service android:name="sun.ch.service.LocationService" />
-        <!--小火箭服务-->
+        <!-- 小火箭服务 -->
         <service android:name="sun.ch.service.RocketService" />
-        <!--配置电话服务-->
+        <!-- 配置电话服务 -->
         <service android:name="sun.ch.service.PhoneAddressService">
             <intent-filter>
                 <action android:name="android.intent.action.NEW_OUTGOING_CALL" />
             </intent-filter>
         </service>
-        <!--配置超级管理员-->
-        <receiver android:name="sun.ch.receiver.AdminReceiver"
-            android:label="@string/sample_device_admin"
+        <!-- 配置超级管理员 -->
+        <receiver
+            android:name="sun.ch.receiver.AdminReceiver"
             android:description="@string/sample_device_admin_description"
+            android:label="@string/sample_device_admin"
             android:permission="android.permission.BIND_DEVICE_ADMIN">
-            <meta-data android:name="android.app.device_admin"
+            <meta-data
+                android:name="android.app.device_admin"
                 android:resource="@xml/device_admin_sample" />
+
             <intent-filter>
                 <action android:name="android.app.action.DEVICE_ADMIN_ENABLED" />
             </intent-filter>
-        </receiver><!-- ATTENTION: This was auto-generated to add Google Play services to your project for
-     App Indexing.  See https://g.co/AppIndexing/AndroidStudio for more information. -->
-        <meta-data
-            android:name="com.google.android.gms.version"
-            android:value="@integer/google_play_services_version" />
+        </receiver>
+        <!--黑名单拦截服务-->
+        <service android:name="sun.ch.service.BlackNameService"/>
     </application>
 
 </manifest>

@@ -38,5 +38,12 @@
         android:id="@+id/showWindowlocation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
+    <sun.ch.view.Settings_item
+        android:id="@+id/blackName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tool:desc_off="拦截黑名单已经关闭"
+        tool:desc_on="拦截黑名单已经开启"
+        tool:settingTitle="拦截黑名单" />
 
 </LinearLayout>
