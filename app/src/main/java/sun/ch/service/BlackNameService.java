@@ -65,7 +65,7 @@ public class BlackNameService extends Service {
                     System.out.println("模式为"+mode);
                     if(!TextUtils.isEmpty(mode)){
                         if(mode.equals("1")||mode.equals("3")){
-                            //拦截电话
+                            //挂断电话
                             endCall();
                         }
                     }
