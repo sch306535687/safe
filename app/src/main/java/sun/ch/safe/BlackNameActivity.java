@@ -142,7 +142,16 @@ public class BlackNameActivity extends Activity {
                 boolean add = dao.add(number, mode);//添加数据
                 if(add){
                     dialog.dismiss();
-                    initData();
+                    BlackNumberInfo blackNumberInfo = new BlackNumberInfo();
+                    blackNumberInfo.setNumber(number);
+                    blackNumberInfo.setMode(mode);
+                    list.add(0,blackNumberInfo);
+                    if(adapt==null){
+                        adapt = new MyAdapt();
+                    }else{
+                        adapt.notifyDataSetChanged();
+                    }
+                    //initData();
                 }
             }
         });
