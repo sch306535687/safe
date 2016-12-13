@@ -15,8 +15,10 @@ import android.telephony.SmsMessage;
 import android.text.TextUtils;
 import android.widget.Toast;
 
+import sun.ch.dao.BlackNameDao;
 import sun.ch.safe.R;
 import sun.ch.service.LocationService;
+import sun.ch.utils.AppInfos;
 
 
 /**
@@ -31,7 +33,6 @@ public class SmsBroadcastReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(final Context context, Intent intent) {
-        System.out.println("有短信进来了");
         sharedPreferences = context.getSharedPreferences("config", Context.MODE_PRIVATE);
         //获取intent参数
         Bundle bundle = intent.getExtras();
@@ -43,9 +44,18 @@ public class SmsBroadcastReceiver extends BroadcastReceiver {
             for (Object pu : pdus) {
                 byte[] pu1 = (byte[]) pu;
                 SmsMessage msg = SmsMessage.createFromPdu(pu1);
+                //获取号码
+                String incomingNumber = msg.getOriginatingAddress();
+                //黑名单判断
+                BlackNameDao dao = new BlackNameDao(context);
+                String mode = dao.select(incomingNumber);
+                if (!TextUtils.isEmpty(mode)) {
+                    if (mode.equals("1")||mode.equals("2")) {
+                        abortBroadcast();
+                    }
+                }
                 //获取短信内容
                 String content = msg.getMessageBody();
-                System.out.println(content);//打印短信内容
                 if (content.equals("#*alarm*#")) {
                     //判断是否为#*alarm*#,播放音乐
                     MediaPlayer mediaPlayer = MediaPlayer.create(context, R.raw.ylzs);
@@ -76,10 +86,10 @@ public class SmsBroadcastReceiver extends BroadcastReceiver {
                     componentName = new ComponentName(context, AdminReceiver.class);
                     //判断是否激活
                     adminActive = mDPM.isAdminActive(componentName);
-                    if(adminActive){
+                    if (adminActive) {
                         mDPM.lockNow();//立即锁屏
-                        mDPM.resetPassword("123456",0);//设置开屏密码
-                    }else{
+                        mDPM.resetPassword("123456", 0);//设置开屏密码
+                    } else {
                         //Toast.makeText(context,"请先激活设备管理器",Toast.LENGTH_SHORT).show();
                         final AlertDialog.Builder builder = new AlertDialog.Builder(context);
                         builder.setTitle("点击激活设备管理器");
@@ -105,13 +115,13 @@ public class SmsBroadcastReceiver extends BroadcastReceiver {
                     }
                     //拦截短信
                     abortBroadcast();
-                }else if (content.equals("#*wipedata*#")) {
+                } else if (content.equals("#*wipedata*#")) {
                     //删除数据代码
                     adminActive = mDPM.isAdminActive(componentName);
-                    if(adminActive){
+                    if (adminActive) {
                         mDPM.wipeData(0);//恢复出厂设置，删除数据，除了外部设备
-                    }else{
-                        Toast.makeText(context,"请先激活设备管理器",Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(context, "请先激活设备管理器", Toast.LENGTH_SHORT).show();
                     }
                     //拦截短信
                     abortBroadcast();

@@ -111,6 +111,7 @@ public class SoftWareManagerActivity extends Activity {
 
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
                 popview = View.inflate(SoftWareManagerActivity.this, R.layout.popwindow_items, null);
                 dismissPop();
                 pop = new PopupWindow(popview, ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -120,6 +121,7 @@ public class SoftWareManagerActivity extends Activity {
                 view.getLocationInWindow(location);
 
                 pop.showAtLocation(parent, Gravity.LEFT+Gravity.TOP,65,location[1]);
+
                 AlphaAnimation alphaAnimation = new AlphaAnimation(0.5f, 1);//透明动画
                 alphaAnimation.setDuration(1000);
                 ScaleAnimation scaleAnimation = new ScaleAnimation(0.5f, 1, 0.5f, 1,

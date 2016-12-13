@@ -140,7 +140,8 @@ public class BlackNameActivity extends Activity {
                 boolean add = dao.add(number, mode);//添加数据
                 if(add){
                     dialog.dismiss();
-                    initData();
+                    //initData();
+                    adapt.notifyDataSetChanged();//重新更新数据
                 }
             }
         });
@@ -211,6 +212,5 @@ public class BlackNameActivity extends Activity {
         TextView number;
         TextView mode;
         ImageView clean;
-
     }
 }
