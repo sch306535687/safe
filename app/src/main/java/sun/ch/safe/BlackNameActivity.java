@@ -70,7 +70,9 @@ public class BlackNameActivity extends Activity {
             public void run() {
                 //获取全部数据
                 list = dao.getPageData(pageNumber, pageSize);
-                handler.sendEmptyMessage(0);
+                if(list.size()>0){
+                    handler.sendEmptyMessage(0);
+                }
             }
         }.start();
     }

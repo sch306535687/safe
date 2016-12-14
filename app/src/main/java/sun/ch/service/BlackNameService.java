@@ -5,7 +5,10 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.database.ContentObserver;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.telephony.PhoneStateListener;
@@ -57,7 +60,7 @@ public class BlackNameService extends Service {
      */
     public class BlackNameListener extends PhoneStateListener {
         @Override
-        public void onCallStateChanged(int state, String incomingNumber) {
+        public void onCallStateChanged(int state, final String incomingNumber) {
             switch (state){
                 case TelephonyManager.CALL_STATE_RINGING://正在响铃
                     //黑名单判断
@@ -65,6 +68,16 @@ public class BlackNameService extends Service {
                     System.out.println("模式为"+mode);
                     if(!TextUtils.isEmpty(mode)){
                         if(mode.equals("1")||mode.equals("3")){
+                            //清楚通话记录中号码
+                            final Uri uri = Uri.parse("content://call_log/calls");
+                            getContentResolver().registerContentObserver(uri, true, new ContentObserver(new Handler()) {
+                                @Override
+                                public void onChange(boolean selfChange) {
+                                    getContentResolver().unregisterContentObserver(this);//反注册
+                                    getContentResolver().delete(uri,"number=?",new String[]{incomingNumber});//调用删除方法
+                                    super.onChange(selfChange);
+                                }
+                            });
                             //挂断电话
                             endCall();
                         }
