@@ -52,19 +52,19 @@ public class MainActivity extends Activity {
                         showAlertDialog();
                         break;
                     case 1:
-                        //点击的是设置按钮
+                        //通讯卫士
                         startActivity(new Intent(getApplicationContext(), BlackNameActivity.class));
                         break;
                     case 2:
-                        //点击的是设置按钮
+                        //软件管理
                         startActivity(new Intent(getApplicationContext(), SoftWareManagerActivity.class));
                         break;
                     case 7:
-                        //点击的是设置按钮
+                        //高级工具
                         startActivity(new Intent(getApplicationContext(), AdvanceToolsActivity.class));
                         break;
                     case 8:
-                        //点击的是设置按钮
+                        //设置中心
                         startActivity(new Intent(getApplicationContext(), SettingsActivity.class));
                         break;
                 }
