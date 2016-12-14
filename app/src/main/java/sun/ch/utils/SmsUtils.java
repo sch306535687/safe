@@ -5,12 +5,12 @@ import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Environment;
+import android.os.SystemClock;
 import android.util.Xml;
 
 import org.xmlpull.v1.XmlSerializer;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 
 /**
@@ -22,7 +22,11 @@ public class SmsUtils {
      * 备份系统短信
      * @return
      */
-    public static boolean getSms(Context context){
+    public interface Progress{
+        public void setCount(int count);
+        public void setProgress(int process);
+    }
+    public static boolean getSms(Context context,Progress progress){
 
         //判断sd卡是否存在
         if(Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)){
@@ -38,7 +42,9 @@ public class SmsUtils {
                 serializer.setOutput(outputStream,"utf-8");//执行写入方法
                 serializer.startDocument("utf-8",true);
                 serializer.startTag(null,"messages");
-
+                int count = cursor.getCount();
+                progress.setCount(count);
+                int process = 0;
                 while(cursor.moveToNext()){
 
                     serializer.startTag(null,"message");
@@ -56,15 +62,16 @@ public class SmsUtils {
                         serializer.endTag(null,"type");
                     serializer.endTag(null,"message");
 
+                    process++;
+                    SystemClock.sleep(1000);
+                    progress.setProgress(process);
                 }
 
                 serializer.endTag(null,"messages");
                 serializer.endDocument();
-
                 outputStream.close();
                 return true;
             } catch (Exception e) {
-                System.out.println("ddddddddd");
                 e.printStackTrace();
             }
         }
