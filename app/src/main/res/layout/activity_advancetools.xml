@@ -22,4 +22,15 @@
         android:textSize="18sp"
         android:drawablePadding="5dp"
         android:clickable="true"/>
+    <TextView
+        android:onClick="saveMessage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="短信备份"
+        android:background="@drawable/selectcontact"
+        android:drawableLeft="@android:drawable/ic_menu_camera"
+        android:gravity="center_vertical"
+        android:textSize="18sp"
+        android:drawablePadding="5dp"
+        android:clickable="true"/>
 </LinearLayout>
