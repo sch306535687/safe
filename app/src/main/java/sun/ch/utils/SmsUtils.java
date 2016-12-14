@@ -35,6 +35,7 @@ public class SmsUtils {
                 Cursor cursor = resolver.query(uri, new String[]{"address", "date", "body", "type"}, null, null, null);
                 //使用序列化器把短信保存到message.xml
                 XmlSerializer serializer = Xml.newSerializer();
+                serializer.setOutput(outputStream,"utf-8");//执行写入方法
                 serializer.startDocument("utf-8",true);
                 serializer.startTag(null,"messages");
 
@@ -59,10 +60,11 @@ public class SmsUtils {
 
                 serializer.endTag(null,"messages");
                 serializer.endDocument();
-                serializer.setOutput(outputStream,"utf-8");//执行写入方法
+
                 outputStream.close();
                 return true;
             } catch (Exception e) {
+                System.out.println("ddddddddd");
                 e.printStackTrace();
             }
         }
