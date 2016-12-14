@@ -1,6 +1,7 @@
 package sun.ch.safe;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
@@ -95,7 +96,7 @@ public class SoftWareManagerActivity extends Activity {
             @Override
             public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
                 dismissPop();//退出popwindow
-                if(firstVisibleItem!=0){//注意判断
+                if (firstVisibleItem != 0) {//注意判断
                     if (firstVisibleItem < userList.size() + 1) {
                         app_type.setText("我的应用");
                     } else {
@@ -109,25 +110,83 @@ public class SoftWareManagerActivity extends Activity {
         //监听点击条目事件，弹出popwindow
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
+            //private Info app;
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                popview = View.inflate(SoftWareManagerActivity.this, R.layout.popwindow_items, null);
-                dismissPop();
-                pop = new PopupWindow(popview, ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
-                pop.setBackgroundDrawable(new BitmapDrawable());
-                //获取view展示到窗体上的位置
-                int[] location = new int[2];
-                view.getLocationInWindow(location);
+                if (position!=0 && position!=(userList.size()+1)) {
+                    Object obj = listView.getItemAtPosition(position);//拿到当前item对象
+                    //判断当前对象不为空并且为Info的实例
+                    if (obj != null && obj instanceof Info) {
+                        popview = View.inflate(SoftWareManagerActivity.this, R.layout.popwindow_items, null);
+                        LinearLayout mUninstall = (LinearLayout) popview.findViewById(R.id.uninstall);
+                        LinearLayout mRun = (LinearLayout) popview.findViewById(R.id.run);
+                        LinearLayout mShare = (LinearLayout) popview.findViewById(R.id.share);
+                        if (position < userList.size() + 1) {
+                            info = userList.get(position - 1);
+                        } else {
+                            info = systemList.get(position - (userList.size() + 2));
+                        }
+                        /**
+                         * 卸载应用程序
+                         */
+                        mUninstall.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Intent intent = new Intent(Intent.ACTION_VIEW);
+                                intent.addCategory(Intent.CATEGORY_DEFAULT);
+                                intent.setData(Uri.parse("package:" + info.getPackAgeName()));
+                                startActivityForResult(intent, 0);
+                                dismissPop();//关闭泡泡窗口
+                            }
+                        });
+                        /**
+                         * 运行应用程序
+                         */
+                        mRun.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Intent intent = SoftWareManagerActivity.this.getPackageManager().getLaunchIntentForPackage(info.getPackAgeName());
+                                startActivity(intent);
+                                dismissPop();//关闭泡泡窗口
+                                System.out.println(info.getPackAgeName());
+                            }
+                        });
+                        /**
+                         * 分享应用程序
+                         */
+                        mShare.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Intent intent = new Intent(Intent.ACTION_SEND);
+                                intent.setType("text/plain");
+                                intent.putExtra("android.intent.extra.SUBJECT","f分享");
+                                intent.putExtra("android.intent.extra.TEXT",
+                                        "推荐您使用软件"+info.getAppName()+"下载地址:https://play.google.com/store/apps/details?id="+info.getPackAgeName());
+                                startActivity(intent);
+                                dismissPop();//关闭泡泡窗口
+                                System.out.println("分享");
+                            }
+                        });
+                        dismissPop();//关闭泡泡窗口
+                        pop = new PopupWindow(popview, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                        pop.setBackgroundDrawable(new BitmapDrawable());
+                        //获取view展示到窗体上的位置
+                        int[] location = new int[2];
+                        view.getLocationInWindow(location);
 
-                pop.showAtLocation(parent, Gravity.LEFT+Gravity.TOP,65,location[1]);
+                        pop.showAtLocation(parent, Gravity.LEFT + Gravity.TOP, 65, location[1]);
 
-                AlphaAnimation alphaAnimation = new AlphaAnimation(0.5f, 1);//透明动画
-                alphaAnimation.setDuration(1000);
-                ScaleAnimation scaleAnimation = new ScaleAnimation(0.5f, 1, 0.5f, 1,
-                        Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);//缩放动画
-                scaleAnimation.setDuration(600);
-                popview.startAnimation(scaleAnimation);//开始动画
+                /*AlphaAnimation alphaAnimation = new AlphaAnimation(0.5f, 1);//透明动画
+                alphaAnimation.setDuration(1000);*/
+                        ScaleAnimation scaleAnimation = new ScaleAnimation(0.5f, 1, 0.5f, 1,
+                                Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);//缩放动画
+                        scaleAnimation.setDuration(600);
+                        popview.startAnimation(scaleAnimation);//开始动画
+                    }
+                }
+
+
             }
         });
     }
@@ -136,10 +195,16 @@ public class SoftWareManagerActivity extends Activity {
      * 退出popwindow
      */
     private void dismissPop() {
-        if(pop!=null&&pop.isShowing()){
+        if (pop != null && pop.isShowing()) {
             pop.dismiss();
             pop = null;
         }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        dismissPop();//关闭泡泡窗
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     private class AppAdapter extends BaseAdapter {

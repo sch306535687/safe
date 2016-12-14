@@ -5,6 +5,7 @@
     android:background="@mipmap/local_popup_bg">
 
     <LinearLayout
+        android:id="@+id/uninstall"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="5dp"
@@ -23,6 +24,7 @@
             android:text="卸载" />
     </LinearLayout>
     <LinearLayout
+        android:id="@+id/run"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="5dp"
@@ -41,6 +43,7 @@
             android:text="运行" />
     </LinearLayout>
     <LinearLayout
+        android:id="@+id/share"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="5dp"
