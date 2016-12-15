@@ -59,6 +59,10 @@ public class MainActivity extends Activity {
                         //软件管理
                         startActivity(new Intent(getApplicationContext(), SoftWareManagerActivity.class));
                         break;
+                    case 3:
+                        //进程管理
+                        startActivity(new Intent(getApplicationContext(), ProcessActivity.class));
+                        break;
                     case 7:
                         //高级工具
                         startActivity(new Intent(getApplicationContext(), AdvanceToolsActivity.class));

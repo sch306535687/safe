@@ -58,6 +58,7 @@
         <activity android:name=".QueryAddress" />
         <activity android:name=".BlackNameActivity" />
         <activity android:name=".SoftWareManagerActivity" />
+        <activity android:name=".ProcessActivity" />
         <activity
             android:name=".RocketBackgroundActivity"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
