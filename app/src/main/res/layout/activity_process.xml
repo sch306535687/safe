@@ -15,7 +15,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="5dp">
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp">
         <TextView
             android:id="@+id/tv_process_count"
             android:layout_width="wrap_content"
@@ -36,6 +37,36 @@
     <ListView
         android:id="@+id/listview"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"></ListView>
+        android:layout_height="match_parent"
+        android:layout_weight="1"></ListView>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal">
+        <Button
+            android:id="@+id/select_all"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="selectAll"
+            android:text="全选"/>
+        <Button
+            android:id="@+id/select_oppsite"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="selectOppsite"
+            android:text="反选"/>
+        <Button
+            android:id="@+id/clear_process"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="clearProcess"
+            android:text="清理"/>
+        <Button
+            android:id="@+id/set_process"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="setProcess"
+            android:text="设置"/>
+    </LinearLayout>
 
 </LinearLayout>

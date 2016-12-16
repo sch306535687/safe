@@ -83,16 +83,17 @@ public class ProcessUtils {
         List<ActivityManager.RunningAppProcessInfo> runningAppProcesses = manager.getRunningAppProcesses();
         for (ActivityManager.RunningAppProcessInfo info : runningAppProcesses) {
             ProcessInfo processInfo = new ProcessInfo();
-            String processName = info.processName;//获取进程名称
-            processInfo.setProcessName(processName);
-            //通过进程名称使用包管理器获取进程信息
-            PackageManager packageManager = context.getPackageManager();
             try {
+                String processName = info.processName;//获取进程名称
+                processInfo.setProcessName(processName);
+                //通过进程名称使用包管理器获取进程信息
+                PackageManager packageManager = context.getPackageManager();
                 PackageInfo packageInfo = packageManager.getPackageInfo(processName, 0);
                 Drawable icon = packageInfo.applicationInfo.loadIcon(packageManager);//获取进程图标
                 processInfo.setIcon(icon);
 
-                Debug.MemoryInfo[] processMemoryInfo = manager.getProcessMemoryInfo(new int[1]);
+                int pid = info.pid;
+                Debug.MemoryInfo[] processMemoryInfo = manager.getProcessMemoryInfo(new int[]{pid});
                 int totalPrivateDirty = processMemoryInfo[0].getTotalPrivateDirty();//获取进程占用的内存大小
                 processInfo.setProcessSize(totalPrivateDirty);
 
@@ -101,10 +102,13 @@ public class ProcessUtils {
                 if ((flags & ApplicationInfo.FLAG_SYSTEM) != 0) {
                     //表示系统进程
                     processInfo.setSystem(true);
+                    processInfo.setChecked(false);//默认选择
                 } else {
                     //表示用户进程
                     processInfo.setSystem(false);
+                    processInfo.setChecked(true);//默认选择
                 }
+
                 processInfos.add(processInfo);
             } catch (PackageManager.NameNotFoundException e) {
                 processInfo.setIcon(context.getResources().getDrawable(R.mipmap.ic_launcher));

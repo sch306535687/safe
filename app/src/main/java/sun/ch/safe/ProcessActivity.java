@@ -6,12 +6,14 @@ import android.os.Bundle;
 import android.text.format.Formatter;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.lidroid.xutils.ViewUtils;
 import com.lidroid.xutils.view.annotation.ViewInject;
@@ -36,6 +38,7 @@ public class ProcessActivity extends Activity {
     private List<ProcessInfo> progressInfos;
     private List<ProcessInfo> systemList;
     private List<ProcessInfo> userList;
+    private ProcessAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,20 +69,34 @@ public class ProcessActivity extends Activity {
                     boolean systemProcess = info.isSystem();
                     if (systemProcess) {
                         systemList.add(info);
-                        System.out.println("------------------");
-                        System.out.println(info.getProcessName());
                     } else {
                         userList.add(info);
-                        System.out.println("------------------");
-                        System.out.println("用户进程"+info.getProcessName());
                     }
                 }
                 //直接在子线程中刷新ui
                 runOnUiThread(new Runnable() {
+
                     @Override
                     public void run() {
-                        ProcessAdapter adapter = new ProcessAdapter();
+                        adapter = new ProcessAdapter();
                         listview.setAdapter(adapter);
+                        listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                            @Override
+                            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                Object obj = listview.getItemAtPosition(position);
+                                ViewHolder holder = (ViewHolder) view.getTag();
+                                if (obj!=null && obj instanceof ProcessInfo) {
+                                    ProcessInfo info = (ProcessInfo)obj;
+                                    if(info.isChecked()){
+                                        info.setChecked(false);
+                                        holder.checkbox.setChecked(false);
+                                    }else{
+                                        info.setChecked(true);
+                                        holder.checkbox.setChecked(true);
+                                    };
+                                }
+                            }
+                        });
                     }
                 });
             }
@@ -97,6 +114,9 @@ public class ProcessActivity extends Activity {
 
         @Override
         public Object getItem(int position) {
+            if(position==0 || position==(userList.size() + 1)){
+                return null;
+            }
             if (position < (userList.size() + 1)) {
                 processInfo = userList.get(position - 1);
             } else {
@@ -145,8 +165,8 @@ public class ProcessActivity extends Activity {
 
             viewHolder.process_icon.setBackgroundDrawable(processInfo.getIcon());
             viewHolder.process_name.setText(processInfo.getProcessName());
-            viewHolder.process_size.setText("内存占用"+processInfo.getProcessSize());
-            viewHolder.checkbox.setChecked(processInfo.isSystem());
+            viewHolder.process_size.setText("内存占用"+Formatter.formatFileSize(ProcessActivity.this,processInfo.getProcessSize()*1024));
+            viewHolder.checkbox.setChecked(processInfo.isChecked());
 
             return convertView;
         }
@@ -157,5 +177,50 @@ public class ProcessActivity extends Activity {
         TextView process_name;
         TextView process_size;
         CheckBox checkbox;
+    }
+
+    /**
+     * 全选
+     * @param view
+     */
+    public void selectAll(View view){
+        for(ProcessInfo info:userList){
+            if(!info.isChecked()){
+                info.setChecked(true);
+            }
+        }
+        for(ProcessInfo info:systemList){
+            if(!info.isChecked()){
+                info.setChecked(true);
+            }
+        }
+        adapter.notifyDataSetChanged();//更新界面
+    }
+    /**
+     * 反选
+     * @param view
+     */
+    public void selectOppsite(View view){
+        for(ProcessInfo info:userList){
+           info.setChecked(!info.isChecked());
+        }
+        for(ProcessInfo info:systemList){
+            info.setChecked(!info.isChecked());
+        }
+        adapter.notifyDataSetChanged();//更新界面
+    }
+    /**
+     * 清理进程
+     * @param view
+     */
+    public void clearProcess(View view){
+
+    }
+    /**
+     * 进程设置
+     * @param view
+     */
+    public void setProcess(View view){
+        Toast.makeText(this,"功能还未完善",Toast.LENGTH_SHORT).show();
     }
 }

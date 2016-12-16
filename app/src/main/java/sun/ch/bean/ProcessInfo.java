@@ -10,6 +10,15 @@ public class ProcessInfo {
     private String processName;
     private long processSize;
     private boolean isSystem;
+    private boolean checked;
+
+    public boolean isChecked() {
+        return checked;
+    }
+
+    public void setChecked(boolean checked) {
+        this.checked = checked;
+    }
 
     public Drawable getIcon() {
         return icon;
