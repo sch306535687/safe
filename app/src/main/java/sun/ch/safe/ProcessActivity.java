@@ -66,8 +66,12 @@ public class ProcessActivity extends Activity {
                     boolean systemProcess = info.isSystem();
                     if (systemProcess) {
                         systemList.add(info);
+                        System.out.println("------------------");
+                        System.out.println(info.getProcessName());
                     } else {
                         userList.add(info);
+                        System.out.println("------------------");
+                        System.out.println("用户进程"+info.getProcessName());
                     }
                 }
                 //直接在子线程中刷新ui
@@ -93,12 +97,17 @@ public class ProcessActivity extends Activity {
 
         @Override
         public Object getItem(int position) {
-            return progressInfos.get(position);
+            if (position < (userList.size() + 1)) {
+                processInfo = userList.get(position - 1);
+            } else {
+                processInfo = systemList.get(position - (userList.size() + 2));
+            }
+            return processInfo;
         }
 
         @Override
         public long getItemId(int position) {
-            return position;
+            return position+2;
         }
 
         @Override
@@ -134,7 +143,6 @@ public class ProcessActivity extends Activity {
                 convertView.setTag(viewHolder);
             }
 
-            processInfo = progressInfos.get(position);
             viewHolder.process_icon.setBackgroundDrawable(processInfo.getIcon());
             viewHolder.process_name.setText(processInfo.getProcessName());
             viewHolder.process_size.setText("内存占用"+processInfo.getProcessSize());

@@ -19,13 +19,16 @@ import java.io.FileOutputStream;
  */
 public class SmsUtils {
     /**
+     * 定义一个接口供方法实现
+     */
+    public interface Progress{
+        public abstract void setCount(int count);
+        public abstract void setProgress(int process);
+    }
+    /**
      * 备份系统短信
      * @return
      */
-    public interface Progress{
-        public void setCount(int count);
-        public void setProgress(int process);
-    }
     public static boolean getSms(Context context,Progress progress){
 
         //判断sd卡是否存在
