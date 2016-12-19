@@ -113,6 +113,7 @@ public class ProcessUtils {
             } catch (PackageManager.NameNotFoundException e) {
                 processInfo.setIcon(context.getResources().getDrawable(R.mipmap.ic_launcher));
                 processInfo.setProcessName("xxxx");
+                //processInfos.add(processInfo);
                 e.printStackTrace();
             }
         }

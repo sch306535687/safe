@@ -1,6 +1,7 @@
 package sun.ch.safe;
 
 import android.app.Activity;
+import android.app.ActivityManager;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.format.Formatter;
@@ -39,6 +40,9 @@ public class ProcessActivity extends Activity {
     private List<ProcessInfo> systemList;
     private List<ProcessInfo> userList;
     private ProcessAdapter adapter;
+    private int processCount;
+    private long freeStorage;
+    private long totalStorage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,12 +56,10 @@ public class ProcessActivity extends Activity {
      * 初始化数据
      */
     private void init() {
-        int processCount = ProcessUtils.getProcessCount(this);
-        long freeStorage = ProcessUtils.getFreeStorage(this);
-        long totalStorage = ProcessUtils.getTotalStorage();
-        tv_process_count.setText("运行中进程:" + processCount + "个");
-        tv_ram.setText("剩余/总内存:" + Formatter.formatFileSize(this, freeStorage) + "/" +
-                Formatter.formatFileSize(this, totalStorage));
+        processCount = ProcessUtils.getProcessCount(this);
+        freeStorage = ProcessUtils.getFreeStorage(this);
+        totalStorage = ProcessUtils.getTotalStorage();
+
         //初始化listview
         new Thread() {
             @Override
@@ -78,6 +80,9 @@ public class ProcessActivity extends Activity {
 
                     @Override
                     public void run() {
+                        tv_process_count.setText("运行中进程:" + (userList.size()+systemList.size()) + "个");
+                        tv_ram.setText("剩余/总内存:" + Formatter.formatFileSize(ProcessActivity.this, freeStorage) + "/" +
+                                Formatter.formatFileSize(ProcessActivity.this, totalStorage));
                         adapter = new ProcessAdapter();
                         listview.setAdapter(adapter);
                         listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -109,7 +114,7 @@ public class ProcessActivity extends Activity {
         private ProcessInfo processInfo;
         @Override
         public int getCount() {
-            return progressInfos.size()+2;
+            return userList.size()+systemList.size()+2;
         }
 
         @Override
@@ -214,7 +219,45 @@ public class ProcessActivity extends Activity {
      * @param view
      */
     public void clearProcess(View view){
+        //在迭代时不能对被迭代对象进行增删操作，需重新创建集合数组后，把要操作的对象放入，在新集合数组中操作
+        List<ProcessInfo> arrayList = new ArrayList<ProcessInfo>();
+        long killSize = 0;
+        int killCount = 0;
+        for(ProcessInfo info:userList){
+            if(info.isChecked()){
+                arrayList.add(info);
+            }
+        }
+        for(ProcessInfo info:systemList){
+            if(info.isChecked()){
+                arrayList.add(info);
+            }
+        }
+        //操作新创建的集合
+        if(arrayList.size()>0){
+            for(ProcessInfo list:arrayList){
+                killCount++;//杀死进程的个数
+                killSize += list.getProcessSize()*1024;//总共释放多少内存
+                freeStorage+=killSize;
+                //把对象从集合中移除
+                if(list.isSystem()){
+                    systemList.remove(list);
+                }else{
+                    userList.remove(list);
+                }
+                //利用进程管理器杀死进程杀死进程
+                ActivityManager activityManager = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
+                activityManager.killBackgroundProcesses(list.getProcessName());
+            }
+            adapter.notifyDataSetChanged();//更新界面
+            tv_process_count.setText("运行中进程:" + (userList.size()+systemList.size()-killCount+1) + "个");//更新进行个数
+            tv_ram.setText("剩余/总内存:" + Formatter.formatFileSize(this,freeStorage)+ "/" +
+                    Formatter.formatFileSize(this, totalStorage));//更新内存大小
 
+            Toast.makeText(this,"已杀死"+arrayList.size()+"个进程,共释放"+Formatter.formatFileSize(this,killSize)+"内存",Toast.LENGTH_SHORT).show();
+        }else{
+            Toast.makeText(this,"没有进程可杀",Toast.LENGTH_SHORT).show();
+        }
     }
     /**
      * 进程设置
