@@ -12,6 +12,7 @@ import android.view.animation.RotateAnimation;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import java.util.List;
@@ -32,6 +33,7 @@ public class AntivirusActivity extends Activity {
     private List<PackageInfo> installedPackages;
     private ImageView scan_move;
     private RotateAnimation rotateAnimation;
+    private ScrollView scroll_view;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +43,8 @@ public class AntivirusActivity extends Activity {
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
         antivirus_text = (TextView) findViewById(R.id.antivirus_text);
         scan_move = (ImageView) findViewById(R.id.scan_move);
+        scroll_view = (ScrollView) findViewById(R.id.scroll_view);
+
         //扫描动画
         rotateAnimation = new RotateAnimation(0, 360, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
         rotateAnimation.setDuration(1500);
@@ -65,6 +69,12 @@ public class AntivirusActivity extends Activity {
                         textView.setText(appInfo.appName+"--安全");
                     }
                     virus_list.addView(textView);
+                    scroll_view.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            scroll_view.fullScroll(ScrollView.FOCUS_DOWN);
+                        }
+                    });
                     break;
                 case BEGIN:
                     progressBar.setMax(installedPackages.size());//初始化进度条最大值

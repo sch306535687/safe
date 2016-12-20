@@ -24,6 +24,7 @@ public class AntivirusDao {
             desc = cursor.getString(0);
             System.out.println(desc);
         }
+        db.close();
         return desc;
     }
 }
