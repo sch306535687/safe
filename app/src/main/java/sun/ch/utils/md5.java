@@ -1,5 +1,8 @@
 package sun.ch.utils;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.security.MessageDigest;
 
 /**
@@ -9,8 +12,8 @@ public class md5 {
 
     public final static String MD5(String pwd) {
         //用于加密的字符
-        char md5String[] = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
-                'A', 'B', 'C', 'D', 'E', 'F' };
+        char md5String[] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
+                'A', 'B', 'C', 'D', 'E', 'F'};
         try {
             //使用平台的默认字符集将此 String 编码为 byte序列，并将结果存储到一个新的 byte数组中
             byte[] btInput = pwd.getBytes();
@@ -40,6 +43,43 @@ public class md5 {
         } catch (Exception e) {
             return null;
         }
+    }
+
+    /**
+     * 根据应用源地址获取应用特征码（md5值）
+     *
+     * @return
+     */
+    public static String getAppMd(String sourceDir) {
+        String result = null;
+        try {
+            File file = new File(sourceDir);
+            //获取数字摘要
+            MessageDigest messageDigest = MessageDigest.getInstance("md5");
+            FileInputStream fis = new FileInputStream(file);
+            byte[] buffer = new byte[1024];
+            int len = 0;
+            while ((len = fis.read(buffer)) != -1) {
+                messageDigest.update(buffer, 0, len);
+            }
+            byte[] bytes = messageDigest.digest();//获取读取到的字节数组
+            //把字节数组转成字符串
+            StringBuffer sb = new StringBuffer();
+            for (byte b : bytes) {
+                int number = b & 0xff;
+                String hex = Integer.toHexString(number);
+                if (hex.length() == 1) {
+                    sb.append("0"+hex);
+                } else {
+                    sb.append(hex);
+                }
+            }
+            result = sb.toString();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return result;
     }
 
 }

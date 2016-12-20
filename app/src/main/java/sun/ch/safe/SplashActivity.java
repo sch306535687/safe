@@ -87,8 +87,6 @@ public class SplashActivity extends Activity {
         TextView tvVersion = (TextView) findViewById(R.id.tv_version);
         tvProgress = (TextView) findViewById(R.id.tv_progress);
         tvVersion.setText("版本名:" + getVersionName());
-        //初始化时，把数据库拷贝到/data/data/sun.ch.safe/files目录下
-        StreamUtils.copyDatabase("address.db",this);
         //判断是否需要提示更新版本信息
         SharedPreferences sharedPreferences = getSharedPreferences("config", MODE_PRIVATE);
         //获取SharedPreferences中信息
@@ -107,6 +105,10 @@ public class SplashActivity extends Activity {
         anim.setDuration(2000);
         layout.startAnimation(anim);
 
+        //初始化时，把手机号归属地数据库拷贝到/data/data/sun.ch.safe/files目录下
+        StreamUtils.copyDatabase("address.db",this);
+        //初始化时，把病毒数据库拷贝到/data/data/sun.ch.safe/files目录下
+        StreamUtils.copyDatabase("antivirus.db",this);
         addShortCut();//往桌面添加快捷方式
     }
 

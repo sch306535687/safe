@@ -63,6 +63,10 @@ public class MainActivity extends Activity {
                         //进程管理
                         startActivity(new Intent(getApplicationContext(), ProcessActivity.class));
                         break;
+                    case 5:
+                        //手机杀毒
+                        startActivity(new Intent(getApplicationContext(), AntivirusActivity.class));
+                        break;
                     case 7:
                         //高级工具
                         startActivity(new Intent(getApplicationContext(), AdvanceToolsActivity.class));
