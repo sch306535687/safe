@@ -17,7 +17,7 @@ import sun.ch.bean.Info;
  */
 public class AppInfos {
     /**
-     * 获取所有应用方法
+     * 获取手机所有应用程序
      * @return
      */
     public  List<Info> getAppInfos(Context context){

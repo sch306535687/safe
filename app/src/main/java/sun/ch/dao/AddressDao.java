@@ -6,7 +6,7 @@ import android.database.sqlite.SQLiteDatabase;
 /**
  * 归属地查询工具
  * 
- * @author Kevin
+ * @author sunch
  * 
  */
 public class AddressDao {

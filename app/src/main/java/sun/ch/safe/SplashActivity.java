@@ -88,7 +88,7 @@ public class SplashActivity extends Activity {
         tvProgress = (TextView) findViewById(R.id.tv_progress);
         tvVersion.setText("版本名:" + getVersionName());
         //初始化时，把数据库拷贝到/data/data/sun.ch.safe/files目录下
-        copyDatabase("address.db");
+        StreamUtils.copyDatabase("address.db",this);
         //判断是否需要提示更新版本信息
         SharedPreferences sharedPreferences = getSharedPreferences("config", MODE_PRIVATE);
         //获取SharedPreferences中信息
@@ -107,6 +107,23 @@ public class SplashActivity extends Activity {
         anim.setDuration(2000);
         layout.startAnimation(anim);
 
+        addShortCut();//往桌面添加快捷方式
+    }
+
+    /**
+     * 往桌面添加快捷方式
+     */
+    public void addShortCut(){
+        //往桌面添加快捷方式
+        Intent intent = new Intent();
+        intent.setAction("com.android.launcher.action.INSTALL_SHORTCUT");
+        intent.putExtra(Intent.EXTRA_SHORTCUT_NAME,"安全卫士");
+        intent.putExtra(Intent.EXTRA_SHORTCUT_ICON,R.mipmap.ic_launcher);
+        intent.putExtra("duplicate",false);//不运行重复创建图标
+        Intent doIntent = new Intent();//点击图标打开主页
+        doIntent.setAction("main");//必须使用隐式方式打开
+        intent.putExtra(Intent.EXTRA_SHORTCUT_INTENT,doIntent);
+        sendBroadcast(intent);//发送添加快捷方式广播
     }
 
     /**
@@ -314,37 +331,5 @@ public class SplashActivity extends Activity {
 
     }
 
-    /**
-     * 把assets目录中的数据库拷贝到/data/data/sun.ch.safe/files/下
-     *
-     * @param databaseName 数据库名称
-     */
-    private void copyDatabase(String databaseName) {
-        InputStream inputStream = null;
-        FileOutputStream os = null;
-        File file = new File(getFilesDir(),databaseName);//创建路径file对象
-        //判断目录下是否已经存在此数据库
-        if (file.exists()) {
-            return;//如果存在就不需要读取
-        }
-        try {
-            inputStream = getAssets().open(databaseName);//读取asset目录下下的数据库为输入流,注意，assets必须跟main目录同级
-            os = new FileOutputStream(file);//创建输出流
-            //开始拷贝
-            int len = 0;
-            byte[] buffer = new byte[1024];
-            while ((len = inputStream.read(buffer)) != -1) {
-                os.write(buffer, 0, len);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                inputStream.close();
-                os.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-    }
+
 }
