@@ -68,6 +68,7 @@
         <activity android:name=".SoftWareManagerActivity" />
         <activity android:name=".ProcessActivity" />
         <activity android:name=".AntivirusActivity" />
+        <activity android:name=".AppLockActivity" />
         <activity
             android:name=".RocketBackgroundActivity"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />

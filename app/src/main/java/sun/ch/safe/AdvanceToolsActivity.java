@@ -67,4 +67,9 @@ public class AdvanceToolsActivity extends Activity {
         }.start();
 
     }
+
+    public void appLock(View view){
+        //打开程序锁界面
+        startActivity(new Intent(this,AppLockActivity.class));
+    }
 }

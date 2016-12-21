@@ -23,7 +23,7 @@ public class AppLockDao {
     public boolean add(String packageName) {
         SQLiteDatabase db = openHelper.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
-        contentValues.put("number", packageName);
+        contentValues.put("packagename", packageName);
         long rowId = db.insert("applock", null, contentValues);
         if (rowId == -1) {
             db.close();
@@ -54,7 +54,7 @@ public class AppLockDao {
      *
      * @return
      */
-    public boolean select(String packageName) {
+    public boolean search(String packageName) {
         SQLiteDatabase db = openHelper.getWritableDatabase();
         boolean flag = false;
         Cursor cursor = db.query("applock", null, "packagename=?", new String[]{packageName}, null, null, null);
