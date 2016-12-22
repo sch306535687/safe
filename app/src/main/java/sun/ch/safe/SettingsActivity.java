@@ -10,6 +10,7 @@ import android.view.View;
 
 import sun.ch.service.BlackNameService;
 import sun.ch.service.PhoneAddressService;
+import sun.ch.service.appLockService;
 import sun.ch.utils.ServiceRunning;
 import sun.ch.view.Settings_click;
 import sun.ch.view.Settings_item;
@@ -31,6 +32,7 @@ public class SettingsActivity extends Activity {
         setAddress();//电话归属地设置
         setWindowStyle();//设置浮窗风格
         setShowWindowlocation();//设置归属地浮窗位置
+        appLock();//程序锁
         //初始化保存的颜色风格
         int window_style = sharedPreferences.getInt("window_style", 0);
         String[] styles = new String[]{"半透明","活力橙","卫士蓝","金属灰","苹果绿"};
@@ -178,6 +180,33 @@ public class SettingsActivity extends Activity {
                     blackName.setCheck(true);
                     //开启来电归属地服务
                     startService(new Intent(SettingsActivity.this, BlackNameService.class));
+                }
+            }
+        });
+    }
+    public void appLock() {
+        final Settings_item applock = (Settings_item) findViewById(R.id.applock);
+        //获取服务是否正在手机后台运行
+        boolean serviceRunning = ServiceRunning.getServiceRunning(this, "sun.ch.service.appLockService");
+        if (serviceRunning) {
+            applock.setCheck(true);//服务正在运行
+        } else {
+            applock.setCheck(false);//服务停止运行
+        }
+        //监听自动更新设置
+        applock.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                boolean check = applock.getCheck();
+                //判断checkBox是否点击
+                if (check) {
+                    applock.setCheck(false);
+                    //关闭来电归属地服务
+                    stopService(new Intent(SettingsActivity.this, appLockService.class));
+                } else {
+                    applock.setCheck(true);
+                    //开启来电归属地服务
+                    startService(new Intent(SettingsActivity.this, appLockService.class));
                 }
             }
         });

@@ -116,12 +116,12 @@ public class UnlockFragment extends Fragment {
                     //定义动画
                     TranslateAnimation translateAnimation = new TranslateAnimation(Animation.RELATIVE_TO_SELF, 0, Animation.RELATIVE_TO_SELF, 1.0f,
                             Animation.RELATIVE_TO_SELF, 0, Animation.RELATIVE_TO_SELF, 0);
-                    translateAnimation.setDuration(2000);
+                    translateAnimation.setDuration(1000);
                     finalConvertView.startAnimation(translateAnimation);
                     new Thread(){
                         @Override
                         public void run() {
-                            SystemClock.sleep(2000);
+                            SystemClock.sleep(1000);
                             unlockList.remove(info);//从集合中删除
                             getActivity().runOnUiThread(new Runnable() {
                                 @Override

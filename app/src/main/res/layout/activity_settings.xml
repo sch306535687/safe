@@ -45,5 +45,12 @@
         tool:desc_off="拦截黑名单已经关闭"
         tool:desc_on="拦截黑名单已经开启"
         tool:settingTitle="拦截黑名单" />
+    <sun.ch.view.Settings_item
+        android:id="@+id/applock"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tool:desc_off="程序锁已经关闭"
+        tool:desc_on="程序锁已经开启"
+        tool:settingTitle="程序锁" />
 
 </LinearLayout>
