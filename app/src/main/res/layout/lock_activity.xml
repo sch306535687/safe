@@ -33,14 +33,17 @@
         android:layout_marginRight="20dp">
 
         <EditText
+            android:id="@+id/et_pwd"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_alignParentBottom="true"
             android:background="@mipmap/btn_green_pressed" />
 
         <Button
+            android:id="@+id/btn_sure"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:onClick="sure"
             android:layout_alignParentRight="true"
             android:background="@mipmap/btn_green_normal"
             android:text="确定"
