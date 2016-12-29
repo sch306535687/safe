@@ -57,22 +57,33 @@
                <action android:name="main"/>
             </intent-filter>
         </activity>
+        <!--设置界面-->
         <activity android:name=".SettingsActivity" />
         <activity android:name=".StealActivity" />
         <activity android:name=".Step1Activity" />
         <activity android:name=".Step2Activity" />
         <activity android:name=".Step3Activity" />
         <activity android:name=".Step4Activity" />
+        <!--联系人界面-->
         <activity android:name=".ContactActivity" />
+        <!--高级工具界面-->
         <activity android:name=".AdvanceToolsActivity" />
+        <!--归属地查询界面-->
         <activity android:name=".QueryAddress" />
+        <!--黑名单界面-->
         <activity android:name=".BlackNameActivity" />
+        <!--软件管理界面-->
         <activity android:name=".SoftWareManagerActivity" />
+        <!--进程界面-->
         <activity android:name=".ProcessActivity" />
+        <!--病毒查杀界面-->
         <activity android:name=".AntivirusActivity" />
+        <!--加锁界面-->
         <activity android:name=".AppLockActivity" />
         <!--加锁密码界面-->
-        <activity android:name=".LockActivity" />
+        <activity android:name=".LockActivity"
+            android:launchMode="singleInstance"
+            android:excludeFromRecents="true"/><!--不在最近应用列表中展现-->
         <activity
             android:name=".RocketBackgroundActivity"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
