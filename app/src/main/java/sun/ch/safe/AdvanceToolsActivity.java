@@ -37,10 +37,11 @@ public class AdvanceToolsActivity extends Activity {
         progressDialog.setMessage("正在进行短信备份");
         progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
         progressDialog.show();
+
         new Thread(){
             @Override
             public void run() {
-                //跳到归属地查询界面
+
                 boolean b = SmsUtils.getSms(AdvanceToolsActivity.this, new SmsUtils.Progress() {//设置进度条进度
                     @Override
                     public void setCount(int count) {

@@ -62,7 +62,7 @@ public class appLockService extends Service {
                     String packageName = task.topActivity.getPackageName();
                     //boolean search = dao.search(packageName);
                         if (infos.contains(packageName) && !packageName.equals(mSkipPackage)) {
-                            //加锁应用
+                            //跳到加锁密码输入界面
                             Intent intent = new Intent(appLockService.this, LockActivity.class);
                             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                             intent.putExtra("package",packageName);
@@ -106,7 +106,6 @@ public class appLockService extends Service {
         public void onChange(boolean selfChange) {
             super.onChange(selfChange);
             infos = dao.findAll();
-            System.out.println("111");
         }
     }
 }

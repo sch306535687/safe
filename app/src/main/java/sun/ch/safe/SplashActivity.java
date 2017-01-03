@@ -121,7 +121,7 @@ public class SplashActivity extends Activity {
         intent.setAction("com.android.launcher.action.INSTALL_SHORTCUT");
         intent.putExtra(Intent.EXTRA_SHORTCUT_NAME,"安全卫士");
         intent.putExtra(Intent.EXTRA_SHORTCUT_ICON,R.mipmap.ic_launcher);
-        intent.putExtra("duplicate",false);//不运行重复创建图标
+        intent.putExtra("duplicate",false);//不允许重复创建图标
         Intent doIntent = new Intent();//点击图标打开主页
         doIntent.setAction("main");//必须使用隐式方式打开
         intent.putExtra(Intent.EXTRA_SHORTCUT_INTENT,doIntent);
