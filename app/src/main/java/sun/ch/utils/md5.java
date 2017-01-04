@@ -10,6 +10,11 @@ import java.security.MessageDigest;
  */
 public class md5 {
 
+    /**
+     * 计算密码md5值
+     * @param pwd
+     * @return
+     */
     public final static String MD5(String pwd) {
         //用于加密的字符
         char md5String[] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
@@ -46,7 +51,7 @@ public class md5 {
     }
 
     /**
-     * 根据应用源地址获取应用特征码（md5值）
+     * 根据应用源地址计算md5值
      *
      * @return
      */

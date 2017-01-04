@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.view.animation.Animation;
+import android.view.animation.LinearInterpolator;
 import android.view.animation.RotateAnimation;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -48,6 +49,7 @@ public class AntivirusActivity extends Activity {
         //扫描动画
         rotateAnimation = new RotateAnimation(0, 360, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
         rotateAnimation.setDuration(1500);
+        rotateAnimation.setInterpolator(new LinearInterpolator());//设置匀速旋转
         rotateAnimation.setRepeatCount(-1);
         scan_move.startAnimation(rotateAnimation);
         init();//初始化
@@ -68,11 +70,11 @@ public class AntivirusActivity extends Activity {
                         textView.setTextColor(Color.BLACK);
                         textView.setText(appInfo.appName+"--安全");
                     }
-                    virus_list.addView(textView);
+                    virus_list.addView(textView,0);//把textView添加到线性布局的最前面
                     scroll_view.post(new Runnable() {
                         @Override
                         public void run() {
-                            scroll_view.fullScroll(ScrollView.FOCUS_DOWN);
+                            scroll_view.fullScroll(ScrollView.FOCUS_DOWN);//进度条自动向下滑动
                         }
                     });
                     break;
@@ -92,6 +94,7 @@ public class AntivirusActivity extends Activity {
             @Override
             public void run() {
                 PackageManager packageManager = getPackageManager();
+                //获取已安装app，某些app卸载后，还残留data/data目录数据也要加载出来PackageManager.GET_UNINSTALLED_PACKAGES
                 installedPackages = packageManager.getInstalledPackages(0);
                 Message message = handler.obtainMessage();
                 message.what = BEGIN;
