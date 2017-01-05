@@ -3,13 +3,13 @@
 
     <item
         android:id="@android:id/background"
-        android:drawable="@drawable/security_progress_bg"/>
+        android:drawable="@drawable/button"/>
     <item
         android:id="@android:id/secondaryProgress"
-        android:drawable="@drawable/security_progress"/>
+        android:drawable="@drawable/button"/>
     <item
         android:id="@android:id/progress"
-        android:drawable="@drawable/security_progress"/>
+        android:drawable="@drawable/button"/>
 
 </layer-list>
 <!--以上写好后，只需在要控件中加上以下代码即可-->

@@ -17,6 +17,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.startapp.android.publish.StartAppAd;
+import com.startapp.android.publish.StartAppSDK;
+
 import sun.ch.service.RocketService;
 import sun.ch.utils.md5;
 
@@ -32,6 +35,8 @@ public class MainActivity extends Activity {
     private TextView confirmPassword;
     private SharedPreferences sharedPreferences;
 
+    private StartAppAd startAppAd = new StartAppAd(this);//初始化startapp广告
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,6 +46,9 @@ public class MainActivity extends Activity {
         gvview.setAdapter(new MyAdapt());
         //获取sharepreferences
         sharedPreferences = getSharedPreferences("config", MODE_PRIVATE);
+
+        // 初始化广告sdk
+        StartAppSDK.init(this, "103357329", "206434373", true);// 参2是用户id,参3是appId
 
         //监听gvview点击事件
         gvview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -209,5 +217,17 @@ public class MainActivity extends Activity {
             tvtext.setText(strArr[position]);
             return view;
         }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        startAppAd.onResume();//继续播放广告
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        startAppAd.onPause();//暂停广告
     }
 }

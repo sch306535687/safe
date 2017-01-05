@@ -25,6 +25,12 @@
         android:layout_marginBottom="10dp"
         android:text="满街脚步 突然静了 满天柏树 突然没有动摇这一刹 我只需要 一罐热茶吧 "/>
 
+    <com.startapp.android.publish.banner.Banner
+        android:id="@+id/startAppBanner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"/>
+
     <GridView
         android:id="@+id/gv_view"
         android:layout_width="match_parent"
