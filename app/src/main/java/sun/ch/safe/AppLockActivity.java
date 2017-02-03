@@ -33,7 +33,7 @@ public class AppLockActivity extends FragmentActivity {
     private void init() {
         lockFragment = new LockFragment();
         unlockFragment = new UnlockFragment();
-        //获取
+        //获取fragmentManager
         fragmentManager = getSupportFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();//注册事物
         //切换到未加锁界面

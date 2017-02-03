@@ -108,11 +108,13 @@ public class LockFragment extends Fragment {
             holder.app_lock.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+
                     //定义动画
                     TranslateAnimation translateAnimation = new TranslateAnimation(Animation.RELATIVE_TO_SELF, 0, Animation.RELATIVE_TO_SELF, -1.0f,
                             Animation.RELATIVE_TO_SELF, 0, Animation.RELATIVE_TO_SELF, 0);
                     translateAnimation.setDuration(1000);
                     finalConvertView.startAnimation(translateAnimation);
+
                     new Thread(){
                         @Override
                         public void run() {

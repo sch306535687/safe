@@ -29,6 +29,8 @@ public class appLockService extends Service {
     private String mSkipPackage;
     private AppLockDao dao;
     private List<String> infos;
+    private MyReceiver myReceiver;
+    private MyObserver myObserver;
 
     @Nullable
     @Override
@@ -39,27 +41,29 @@ public class appLockService extends Service {
     @Override
     public void onCreate() {
         //注册广播
-        MyReceiver myReceiver = new MyReceiver();
+        myReceiver = new MyReceiver();
         IntentFilter filter = new IntentFilter();
         filter.addAction("sun.ch.safe.lock");
         registerReceiver(myReceiver, filter);
 
         dao = new AppLockDao(appLockService.this);
         infos = dao.findAll();
-
+        myObserver = new MyObserver(new Handler());
 
         //注册内容观察者
-        getContentResolver().registerContentObserver(Uri.parse("content://sun.ch.safe.change"),true,new MyObserver(new Handler()));
+        getContentResolver().registerContentObserver(Uri.parse("content://sun.ch.safe.change"),true, myObserver);
         new Thread() {
             @Override
             public void run() {
 
                 while (flag) {
                     AppLockDao dao = new AppLockDao(appLockService.this);
+
                     ActivityManager manager = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
                     List<ActivityManager.RunningTaskInfo> runningTasks = manager.getRunningTasks(1);
                     ActivityManager.RunningTaskInfo task = runningTasks.get(0);
                     String packageName = task.topActivity.getPackageName();
+
                     //boolean search = dao.search(packageName);
                         if (infos.contains(packageName) && !packageName.equals(mSkipPackage)) {
                             //跳到加锁密码输入界面
@@ -81,7 +85,11 @@ public class appLockService extends Service {
     public void onDestroy() {
         flag = false;
         super.onDestroy();
-        getContentResolver().registerContentObserver(Uri.parse("content://sun.ch.safe.change"),true,null);
+        //注销广播
+        unregisterReceiver(myReceiver);
+        myReceiver = null;
+
+        getContentResolver().unregisterContentObserver(myObserver);
     }
     /**
      * 注册广播
